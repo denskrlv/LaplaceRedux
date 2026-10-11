@@ -11,7 +11,7 @@
 ![Topic](https://img.shields.io/badge/Topic-Bayesian%20Deep%20Learning-6A5ACD)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Overview](#overview) · [Contributions](#contributions) · [Results](#results) · [Getting Started](#getting-started) · [Blog](BLOG.md) · [License](#license)
+[Overview](#overview) · [Contributions](#contributions) · [Results](#results) · [Getting Started](#getting-started) · [Blog](docs/BLOG.md) · [License](#license)
 
 </div>
 
@@ -35,13 +35,13 @@ This project reproduces the out-of-distribution (OOD) detection results of *"Lap
 
 ## Results
 
-The full methodology, results tables, figures and discussion are in the **[project blog](BLOG.md)**:
+The full methodology, results tables, figures and discussion are in the **[project blog](docs/BLOG.md)**:
 
-- [Reproduction of Table 1](BLOG.md#reproduction-of-table-1): MNIST and CIFAR-10 OOD detection
-- [Subspace Laplace results](BLOG.md#31-subspace-laplace-results)
-- [SWAG-Laplace results](BLOG.md#32-swag-laplace-results)
-- [Results on UCI Adult](BLOG.md#33-results-on-new-datasets)
-- [Hyperparameter sensitivity results](BLOG.md#34-hyperparameter-sensitivity-results)
+- [Reproduction of Table 1](docs/BLOG.md#reproduction-of-table-1): MNIST and CIFAR-10 OOD detection
+- [Subspace Laplace results](docs/BLOG.md#31-subspace-laplace-results)
+- [SWAG-Laplace results](docs/BLOG.md#32-swag-laplace-results)
+- [Results on UCI Adult](docs/BLOG.md#33-results-on-new-datasets)
+- [Hyperparameter sensitivity results](docs/BLOG.md#34-hyperparameter-sensitivity-results)
 
 ## Repository Structure
 
@@ -56,7 +56,7 @@ The full methodology, results tables, figures and discussion are in the **[proje
 ├── hyperparams/        # Hyperparameter sensitivity notebooks, models and plots
 ├── assets/             # README banner and GitHub social preview (+ generator script)
 ├── blog_images/        # Figures used in the blog
-├── BLOG.md             # Full write-up of the project
+├── docs/BLOG.md        # Full write-up of the project
 ├── Dockerfile
 ├── docker-compose.yml
 └── LICENSE

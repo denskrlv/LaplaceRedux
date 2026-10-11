@@ -20,7 +20,7 @@ This distinction represents a key trade-off between the scope of the Bayesian tr
 
 Our project aims to reproduce and extend the findings of this paper. Our primary goal is to reproduce the out-of-distribution (OOD) detection results presented in **Table 1** of the paper:
 
-<img src="blog_images/table_1.png" alt="Original Table 1" width="400">
+<img src="../blog_images/table_1.png" alt="Original Table 1" width="400">
 
 Using the authors' public codebase for the [algorithms](https://github.com/aleximmer/Laplace) and [experiments](https://github.com/runame/laplace-redux), we verify the reported performance and then extend the code and experiment pipeline through four distinct contributions, one for each team member:
 
@@ -236,7 +236,7 @@ Next, we tested robustness to a demographic domain shift by training on one gend
 | Shift: Male-to-Female | 0.7342 ± 0.3125 | 0.6740 ± 0.0391 | 0.3777 ± 0.0244 | 0.5269 ± 0.0068 |
 | Shift: Female-to-Male | 0.6385 ± 0.0981 | 0.6806 ± 0.0114 | 0.1462 ± 0.0417 | 0.5204 ± 0.0138 |
 
-<img src="blog_images/adult_domain_shift_plot.png" alt="Performance under Gender-based Domain Shift" />
+<img src="../blog_images/adult_domain_shift_plot.png" alt="Performance under Gender-based Domain Shift" />
 
 The robustness of the model was first tested against a demographic domain shift, where it was trained on data from one gender and evaluated on the other. The results show an expected drop in performance, with accuracy falling to between 64% and 73% depending on the shift direction. Crucially, this decrease in accuracy was accompanied by an increase in the Negative Log-Likelihood (NLL) and a corresponding decrease in the model's confidence. This demonstrates a key success of the uncertainty quantification framework: when faced with an out-of-distribution sample, the model not only becomes less accurate but also correctly signals its heightened uncertainty, which is the desired behavior for a trustworthy model.
 
@@ -253,7 +253,7 @@ Finally, we measured how gracefully the model's performance degrades as we injec
 | Noise: 1.0  | 0.3419 ± 0.2020 | 0.7398 ± 0.0440 | 0.2955 ± 0.0423 | 0.5436 ± 0.0301 |
 
 
-<img src="blog_images/adult_noise_intensity_plot.png" alt="Performance under Noise-based Distribution Shift" />
+<img src="../blog_images/adult_noise_intensity_plot.png" alt="Performance under Noise-based Distribution Shift" />
 
 In the second experiment, the model's response to a continuous distribution shift was measured by injecting increasing levels of Gaussian noise into the test data's numerical features. The results show that the model's performance degrades gracefully as the noise intensity increases. As seen in the plots, the Negative Log-Likelihood (NLL) rises steadily with the noise level, indicating that the model becomes progressively more uncertain as the data becomes more corrupted and less familiar. This successful outcome shows that the Laplace framework effectively captures the increasing mismatch between the training and test distributions, with its uncertainty metrics scaling appropriately with the intensity of the shift.
 
@@ -271,7 +271,7 @@ In our exploration, we can first zoom in on the most crucial hyperparameter: `pr
 
 Our first key finding relates to the solid black line present in all the plots (here we show just the most insightful ones to ensure clarity), representing performance on ID data. In every configuration, as we increase `prior_precision` from very small values, the performance on ID data either stays excellent or gets significantly better.
 
-<img src="hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" alt="ECE-kron-probit-pp" width="550"/>
+<img src="../hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" alt="ECE-kron-probit-pp" width="550"/>
 
 This is most evident in this Aggregated ECE plot for the `kron`/`probit` context. The ID ECE starts very high (indicating poor calibration) and then plummets to near-zero for `prior_precision` values of 10.0 or higher. This shows that a higher `prior_precision` acts as a powerful regularizer, penalizing overly complex solutions and forcing the model into a state that is much better calibrated on data it expects to see.
 
@@ -279,7 +279,7 @@ This is most evident in this Aggregated ECE plot for the `kron`/`probit` context
 
 While high `prior_precision` is good for ID data, it comes at a cost. This brings us to the most important insight from our entire experiment, which is best illustrated by the Aggregated NLL plot for the `kron`/`probit` context.
 
-<img src="hyperparams/blog_plots/precision/aggregated_nll_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" alt="NLL-kron-probit-pp" width="550"/>
+<img src="../hyperparams/blog_plots/precision/aggregated_nll_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" alt="NLL-kron-probit-pp" width="550"/>
 
 This plot reveals a critical trade-off between performance on in-distribution data and robustness to out-of-distribution data, which is governed by the prior_precision.
 
@@ -297,7 +297,7 @@ To see this, we should compare two ECE plots side-by-side.
 
 | ECE vs. Prior Precision (kron/probit) | ECE vs. Prior Precision (diag/bridge) |
 |:--:|:--:|
-| <img src="hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" width="500"/> | <img src="hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiandiag_linkbridge_avg_temp.png" width="500"/> |
+| <img src="../hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiankron_linkprobit_avg_temp.png" width="500"/> | <img src="../hyperparams/blog_plots/precision/aggregated_ece_vs_prior_precision_context_hessiandiag_linkbridge_avg_temp.png" width="500"/> |
 
 
 On the left (`kron`/`probit`), we see the dramatic U-shaped behavior for higly shifted OOD data. On the right (`diag`/`bridge`), the pattern is different. While the metrics still improve with higher precision, the OOD error for high-precision values tends to flatten out rather than sharply increasing.
@@ -308,7 +308,7 @@ This tells us that the combination of a more expressive Hessian (`kron`) and a `
 
 In our experiment, one of the most valuable things we can uncover is not just how much a hyperparameter matters, but when it matters. In our exploratory plots, we noticed an interesting edge case: for the specific configuration using a Kronecker-factored Hessian (`hessian_structure='kron'`) and the Laplace Bridge predictive approximation (`link_approx='bridge'`), the choice of `prior_precision` appears to have virtually no effect on the model's final performance, be it NLL or ECE.
 
-<img src="hyperparams/blog_plots/precision/special_case_summary_kron_bridge_horizontal_FINAL.png" alt="flat-pp" width="1000"/>
+<img src="../hyperparams/blog_plots/precision/special_case_summary_kron_bridge_horizontal_FINAL.png" alt="flat-pp" width="1000"/>
 
 This phenomenon occurs at the final prediction step. The `prior_precision` is a critical parameter that directly shapes the variance of the Gaussian posterior over the model's weights. However, the influence of this variance on the final output is mediated by the `link_approx` and `hessian_structure`.
 
@@ -322,7 +322,7 @@ While we've seen several cases where our ResNet18 and WideLeNet models exhibit s
 
 A prime example of this divergence is seen when using the (`hessian=diag`, `link=probit`) configuration.
 
-<img src="hyperparams/blog_plots/precision/model_comparison_ece_vs_prior_precision_context_hessiandiag_linkprobit_avg_temp.png" alt="comparison-pp" width="1000"/>
+<img src="../hyperparams/blog_plots/precision/model_comparison_ece_vs_prior_precision_context_hessiandiag_linkprobit_avg_temp.png" alt="comparison-pp" width="1000"/>
 
 In the plot above, which shows the ECE, the two models tell different stories:
 - For ResNet18 , the ID ECE starts very high, around 0.4, indicating that the pre-trained model, before the full effect of the LA's regularization is applied, is poorly calibrated. As `prior_precision` increases, the ECE drops dramatically. Here, the Laplace Approximation has a powerful corrective effect, fixing a deficient baseline model.
@@ -349,13 +349,13 @@ At low `prior_precision` (e.g., 1e-06), the Hessian structure's impact is profou
 1. **The `bridge` link**
 When using the bridge link approximation at low prior_precision, we uncover a nuanced story with a clear divergence between the model's calibration (ECE) and its predictive likelihood (NLL).
 
-<img src="hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_ece_bridge.png" alt="bridge-hessian_ece" width="1000"/>
+<img src="../hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_ece_bridge.png" alt="bridge-hessian_ece" width="1000"/>
 
 When we evaluate the models based on their ECE, a clear and consistent pattern emerges. The `kron` Hessian approximation, which captures correlations between weights in the model's final layer, consistently yields a lower (better) ECE than the simpler `diag` approximation. This holds true for both the ResNet18 and WideLeNet architectures and across all tested degrees of distribution shift.  This suggests the `bridge` approximation is stable enough to leverage the richer correlation information from `kron` to produce more reliable and well-calibrated confidence estimates.
 
 From a likelihood (NLL) perspective, the model choice seems to make a difference. 
 
-<img src="hyperparams/blog_plots/model_specific_summary_hessian_vs_precision_for_nll_bridge.png" alt="bridge-hessian_nll" width="1000"/>
+<img src="../hyperparams/blog_plots/model_specific_summary_hessian_vs_precision_for_nll_bridge.png" alt="bridge-hessian_nll" width="1000"/>
 
 For the deeper ResNet18 model (first row), capturing weight correlations is clearly beneficial for in-distribution and low-shift data. The `kron` Hessian provides a significantly lower (better) NLL, starting near-zero and outperforming the diag model up to a distribution shift of approximately 75°. This suggests that for ResNet18, the learned relationships between final-layer weights are important for making accurate predictions on familiar data. However, this reliance becomes a liability under severe distribution shift. Beyond 75°, the learned correlation structure becomes invalid and misleading, causing the kron model's performance to degrade sharply and fall below that of the more robust diag model. The `diag` approximation, by never relying on these complex correlations, degrades more gracefully, even if its initial performance is worse.
 
@@ -364,9 +364,9 @@ The shallower and wider WideLeNet model behaves differently. Here, the `kron` He
 
 When we switch to the probit link, the situation becomes much more nuanced and depends entirely on the degree of distribution shift for both of the metrics.
 
-<img src="hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_ece_probit.png" alt="probit-hessian_ece" width="1000"/>
+<img src="../hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_ece_probit.png" alt="probit-hessian_ece" width="1000"/>
 
-<img src="hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_nll_probit.png" alt="probit-hessian_nll" width="1000"/>
+<img src="../hyperparams/blog_plots/summary_hessian_vs_precision_extremes_for_nll_probit.png" alt="probit-hessian_nll" width="1000"/>
 
 For ID and low-shift data, the simpler `diag` Hessian is the clear winner across both metrics. It provides a significantly better NLL and, crucially, a better ECE. This outcome is likely tied to the nature of the probit function, which is highly sensitive to the variance of its input. In this low-regularization setting, the `kron` approximation appears to capture noisy, fine-grained curvature details. These details translate into unstable variance estimates that are detrimental to calibration and likelihood. The `diag` structure, by ignoring these complex correlations, provides a more robust and stable result, proving more effective when the data is close to the training distribution.
 
@@ -379,7 +379,7 @@ Among the hyperparameters investigated, `temperature` scaling emerges as the one
 
 Observing the ECE plots across different `temperature` settings (0.1, 0.5, and 1.0) reveals that this hyperparameter primarily acts as a minor vertical scaling factor on the performance curves, an effect that is often barely visible, as shown in this plot:
 
-<img src="hyperparams/blog_plots/hessian_comparison_by_temp_ece_context_prior0.01_linkbridge.png" alt="temp-ece-nodiff" width="1000"/>
+<img src="../hyperparams/blog_plots/hessian_comparison_by_temp_ece_context_prior0.01_linkbridge.png" alt="temp-ece-nodiff" width="1000"/>
 
 It does not fundamentally alter the shape of the curves, the relative performance of the `diag` and `kron` Hessians, or the critical crossover point where `kron` becomes better calibrated under high distribution shift.
 
@@ -387,7 +387,7 @@ The reason for this limited impact is its relationship with the other, more domi
 
 Interestingly, the `diag` Hessian appears to be slightly more sensitive to temperature changes than the `kron` Hessian. This is most visible at low-to-moderate shifts, where the diag curve shifts more noticeably with temperature. This could be because the simpler `diag` posterior produces a less extreme initial variance, giving the temperature parameter more "room" to have a discernible effect. The `kron` posterior, in contrast, often results in more extreme variance estimates (either very certain or very uncertain), leaving little for temperature scaling to modify.
 
-<img src="hyperparams/blog_plots/hessian_comparison_by_temp_ece_context_prior0.01_linkprobit.png" alt="temp_ece" width="1000"/>
+<img src="../hyperparams/blog_plots/hessian_comparison_by_temp_ece_context_prior0.01_linkprobit.png" alt="temp_ece" width="1000"/>
 
 ## 4. Conclusion
 
